@@ -1,178 +1,149 @@
-# TelegramBot — Mini Asistente Personal con IA
+# Mister Organizer — Tu asistente personal con IA 🤵‍♂️✨
 
-Bot de Telegram que funciona como un asistente personal con **tareas**, **listas de la compra** y **recordatorios programados**, potenciado por **IA** a través de [opencode server](https://opencode.ai).
-
----
-
-## Características
-
-- **IA integrada** — conversación fluida en lenguaje natural; no necesitas comandos
-- **Ingredientes de recetas** — pregúntale "¿qué lleva una paella?" y los añade a tu lista
-- **Recomendaciones inteligentes** — sugiere horarios, rutinas, prioridades basadas en sueño y productividad
-- **Tareas** — crear, listar, completar y borrar tareas con prioridad
-- **Listas de la compra** — crear listas, añadir productos, marcar como comprados
-- **Recordatorios programados** — avisa en el momento exacto que configures
-- **Comandos tradicionales** — también disponibles si prefieres usarlos
+Bot de Telegram con inteligencia artificial que te ayuda a organizar tu día a día: tareas, lista de la compra, recordatorios y mucho más. Todo en lenguaje natural y con mucho humor.
 
 ---
 
-## Requisitos
+## Características 🤖
+
+- **IA integrada** — háblale como a un amigo, sin comandos raros
+- **Recetas y lista de la compra** — pregúntale una receta y añade los ingredientes automáticamente a tu lista
+- **Recomendaciones inteligentes** — sugiere horarios, rutinas y prioridades según tu día
+- **Tareas** — crea, lista, completa y borra tareas al toque
+- **Listas de la compra** — productos, marcar comprados, limpiar lista
+- **Recordatorios** — te avisa cuando le pidas, a la hora que sea
+- **Comandos tradicionales** — si eres old school, también funcionan
+- **Múltiples usuarios** — cada uno con sus propias cosas
+- **Persistencia** — todo en SQLite, nunca se pierde nada
+
+---
+
+## Requisitos prerequisitos 📋
 
 - Python 3.10+
-- Un token de bot de Telegram (obtener de [@BotFather](https://t.me/BotFather))
+- Token de bot de Telegram ([habla con @BotFather](https://t.me/BotFather))
 - [opencode](https://opencode.ai) instalado globalmente (`npm install -g opencode-ai`)
-- Un provider configurado en opencode (Zen, OpenAI, Claude, etc.)
+- Un provider de IA en opencode (Zen, Claude, GPT, el que quieras)
 
 ---
 
-## Instalación
+## Instalación 🚀
 
 ```bash
 # 1. Clonar o copiar el proyecto
 cd TelegramBot
 
-# 2. Crear entorno virtual
+# 2. Entorno virtual (recomendado)
 python -m venv .venv
+.venv\Scripts\Activate.ps1   # Windows
+# source .venv/bin/activate   # Linux/Mac
 
-# 3. Activar el entorno virtual
-# Windows:
-.venv\Scripts\Activate.ps1
-# Linux/Mac:
-source .venv/bin/activate
-
-# 4. Instalar dependencias
+# 3. Instalar dependencias
 pip install -r requirements.txt
 
-# 5. Configurar token
-# Edita .env y pon tu token:
+# 4. Token del bot en .env
 # TELEGRAM_BOT_TOKEN=tu_token_aqui
 ```
 
 ---
 
-## Configuración
+## Cómo usarlo 🎯
 
-1. Habla con [@BotFather](https://t.me/BotFather) en Telegram y crea un bot con `/newbot`
-2. Copia el token en `.env`:
-   ```
-   TELEGRAM_BOT_TOKEN=123456789:ABCdefGHIjklMNOpqrsTUVwxyz
-   ```
-3. Asegúrate de tener opencode instalado y con un provider configurado:
-   ```bash
-   opencode --version
-   ```
-
----
-
-## Ejecutar
-
-### 1. Iniciar opencode server (en una terminal)
-
+### 1. Arrancar la IA (una terminal)
 ```bash
 opencode serve
 ```
 
-### 2. Iniciar el bot de Telegram (en otra terminal)
+### 2. Arrancar el bot (otra terminal)
 
 ```bash
 python bot.py
 ```
 
+¡Y ya! Háblale a tu bot de Telegram directamente.
+
 ---
 
-## Uso
+## Ejemplos de uso 💬
 
-### Modo IA (recomendado)
+| Lo que dices | Lo que hace |
+|---|---|
+| "Crea una tarea para limpiar el coche" | Crea la tarea automaticamente 🎯 |
+| "Añade leche, huevos y pan a la lista" | Los mete en tu lista de la compra 🛒 |
+| "¿Qué tareas tengo?" | Te enumera las pendientes 📋 |
+| "Recuérdame la reunion del jueves a las 10" | Programa recordatorio para ese día ⏰ |
+| "¿Qué lleva una pasta carbonara? Añadelo a la lista" | Te da la receta y mete los ingredientes 🍝 |
+| "Recomiéndame un planning para mañana" | Te organiza el día con ✨ estilo Mister Organizer ✨ |
 
-Simplemente escribe lo que necesites en lenguaje natural:
+---
 
-| Si dices... | El bot hará... |
-|-------------|----------------|
-| "Crea una tarea para limpiar el coche" | Crea una tarea con prioridad normal |
-| "Añade leche, pan y huevos a la lista" | Añade productos a tu lista de la compra |
-| "¿Qué tareas tengo?" | Muestra tus tareas pendientes |
-| "Recuérdame lo del médico mañana a las 9" | Programa un recordatorio |
-| "¿Qué ingredientes lleva una pizza margarita?" | Te dice los ingredientes y los añade a tu lista |
-| "Recomiéndame una rutina para mañana" | Sugiere horarios asumiendo 8h de sueño |
+## Comandos tradicionales (/help) 📟
 
-### Comandos tradicionales
-
-Si prefieres los comandos clásicos, también funcionan:
-
-| Comando | Descripción |
-|---------|-------------|
-| `/tarea` | Crear tarea nueva (guiado) |
+| Comando | Qué hace |
+|---|---|
+| `/tarea` | Crear tarea paso a paso |
 | `/tareas` | Ver tareas pendientes |
-| `/hecho ID` | Marcar tarea como completada |
-| `/borrar ID` | Eliminar tarea |
-| `/lista` | Crear lista nueva (guiado) |
+| `/hecho` ID | Completar tarea |
+| `/borrar` ID | Eliminar tarea |
+| `/lista` | Crear lista de la compra guiada |
 | `/listas` | Ver todas tus listas |
-| `/ver ID` | Ver productos de una lista |
-| `/anadir ID producto` | Añadir producto rápido |
-| `/comprado ID` | Marcar item como comprado |
-| `/limpiar ID` | Borrar items comprados |
-| `/recordar` | Crear recordatorio (guiado) |
+| `/ver` ID | Ver contenido de una lista |
+| `/anadir` ID_L. product | Añadir producto rápido a lista |
+| `/comprado` ID_ITEM | Marcar un producto como comprado |
+| `/limpiar` ID_L. | Borrar productos comprados de una lista |
+| `/recordar` | Nuevo recordatorio guiado |
 | `/recordatorios` | Ver recordatorios activos |
-| `/cancelar ID` | Cancelar recordatorio |
-| `/start` | Bienvenida |
-| `/help` | Ayuda completa |
+| `/cancelar` ID | Cancelar recordatorio |
 
 ---
 
-## Estructura del proyecto
+## Cómo funciona por dentro ⚙️
+
+```
+Tú escribes en Telegram   →   Bot lo manda al opencode server
+                                        ↓
+                              La IA responde con JSON:
+                              {"mensaje": "...", "acciones": [...]}
+                                        ↓
+                              Bot ejecuta las acciones en la DB
+                                        ↓
+                              Te llega la respuesta al Telegram
+```
+
+| Componente | Su misión |
+|---|---|
+| `bot.py` | Arranca el tinglado y registra los handlers |
+| `bot/handlers.py` | Recibe tu mensaje, lo manda a IA, ejecuta acciones, te responde |
+| `bot/ai_client.py` | Habla con opencode server y gestiona los formatos JSON |
+| `bot/database.py` | Se encarga de todo el SQLite (crear, leer, actualizar, borrar) |
+| `data/bot.db` | Aquí vive todo lo que te guardas (SQLite) |
+
+---
+
+## Árbol del proyecto 🌳
 
 ```
 TelegramBot/
-├── bot.py                  # Punto de entrada
-├── requirements.txt        # Dependencias
-├── .env                    # Token del bot (no commitear)
-├── .env.example            # Plantilla de ejemplo
-├── opencode.jsonc          # Config de opencode (MCP tools)
+├── bot.py                  # Punto de entrada (ejecuta el bot)
+├── requirements.txt        # Las dependencias que necesita python
+├── .env                    # Token del bot (NO se sube a GitHub)
+├── .env.example            # Plantilla para que te guíes
 │
 ├── bot/
-│   ├── __init__.py
-│   ├── database.py         # SQLite: tareas, listas, recordatorios
-│   ├── handlers.py         # Handlers de comandos y conversación
-│   ├── ai_client.py        # Cliente HTTP para opencode server
-│   └── mcp_server.py       # MCP server: expone la DB como tools para la IA
+│   ├── __init__.py         # Paquete python vacío
+│   ├── database.py         # CRUD de todo: tareas, listas, recordatorios
+│   ├── handlers.py         # Los que procesan los mensajes del usuario
+│   └── ai_client.py        # Cliente para IA (opencode server + JSON) + ejecutor de acciones
 │
 └── data/
-    └── bot.db              # Base de datos (auto-creada)
+    └── bot.db              # Base de datos local (la crea sola al iniciar)
 ```
 
 ---
 
-## Arquitectura
+## Stack tecnológico 🛠️
 
-```
-Telegram ──→ python-telegram-bot ──→ handlers.handle_message
-                                             │
-                                             ▼
-                                    opencode server (HTTP)
-                                             │
-                                    ┌────────┴────────┐
-                                    ▼                 ▼
-                                 IA (Claude/etc)   MCP tools
-                                                      │
-                                                      ▼
-                                                 database.py (SQLite)
-```
-
-| Componente | Responsabilidad |
-|------------|----------------|
-| `bot.py` | Configuración, registro de handlers, arranque |
-| `bot/handlers.py` | Handler principal de IA + comandos legacy |
-| `bot/ai_client.py` | Cliente HTTP para el opencode server |
-| `bot/mcp_server.py` | Expone la DB como MCP tools para la IA |
-| `bot/database.py` | CRUD SQLite: tareas, listas, items, recordatorios |
-| `opencode.jsonc` | Configura MCP server para este proyecto |
-
----
-
-## Stack tecnológico
-
-- **python-telegram-bot** — librería oficial de Telegram para Python
-- **opencode server** — servidor headless de opencode para conectar con IA
-- **MCP (Model Context Protocol)** — protocolo estándar para herramientas de IA
-- **SQLite** — persistencia embebida, sin configuración externa
-- **httpx** — cliente HTTP asíncrono para conectar con opencode
+- **python-telegram-bot** — para que el bot funcione en Telegram como uno más
+- **SQLite** — donde guardas todo lo tuyo, sin esfuerzo ni configuración complicada
+- **httpx** — para que python hable con el opencode server como si nada, de forma moderna
+- **opencode server** — la IA: recibe tu mensaje y vuelve a la acción directamente con JSONs bien formateados"
