@@ -52,13 +52,13 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
 
     try:
         response = await ai_client.send_message(user_id, chat_id, text)
-        await update.message.reply_text(response, parse_mode="Markdown")
+        if response:
+            await update.message.reply_text(response, parse_mode="Markdown")
     except Exception as e:
         logger.exception("Error al comunicar con opencode server")
+        error_msg = str(e)
         await update.message.reply_text(
-            f"❌ Lo siento, hubo un error al procesar tu mensaje.\n"
-            f"Detalles: {e}\n\n"
-            f"Asegúrate de que opencode server esté corriendo (`opencode serve`)."
+            f"❌ Vaya, algo salió mal... {error_msg[:200]}"
         )
 
 

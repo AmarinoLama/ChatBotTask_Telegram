@@ -109,7 +109,7 @@ class OpenCodeClient:
         session_id = await self.ensure_session(user_id, chat_id)
         system_prompt = SYSTEM_PROMPT.format(user_id=user_id, chat_id=chat_id)
 
-        async with httpx.AsyncClient(timeout=120.0) as client:
+        async with httpx.AsyncClient(timeout=60.0) as client:
             resp = await client.post(
                 f"{self.base_url}/session/{session_id}/message",
                 json={
