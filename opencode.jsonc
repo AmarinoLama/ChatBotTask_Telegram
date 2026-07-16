@@ -1,0 +1,13 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "mcp": {
+    "telegram-bot-db": {
+      "type": "local",
+      "command": ["python", "-m", "bot.mcp_server"],
+      "enabled": true
+    }
+  },
+  "tools": {
+    "telegram-bot-db_*": true
+  }
+}

@@ -1,18 +1,18 @@
-# TelegramBot — Mini Asistente Personal
+# TelegramBot — Mini Asistente Personal con IA
 
-Bot de Telegram que funciona como un asistente personal con **tareas**, **listas de la compra** y **recordatorios programados**. Piensa en ello como una mini Alexa, pero por Telegram.
+Bot de Telegram que funciona como un asistente personal con **tareas**, **listas de la compra** y **recordatorios programados**, potenciado por **IA** a través de [opencode server](https://opencode.ai).
 
 ---
 
 ## Características
 
-- **Tareas** — crear, listar, completar y borrar tareas con prioridad (alta/normal/baja)
-- **Listas de la compra** — crear listas, añadir productos, marcar como comprados, limpiar comprados
+- **IA integrada** — conversación fluida en lenguaje natural; no necesitas comandos
+- **Ingredientes de recetas** — pregúntale "¿qué lleva una paella?" y los añade a tu lista
+- **Recomendaciones inteligentes** — sugiere horarios, rutinas, prioridades basadas en sueño y productividad
+- **Tareas** — crear, listar, completar y borrar tareas con prioridad
+- **Listas de la compra** — crear listas, añadir productos, marcar como comprados
 - **Recordatorios programados** — avisa en el momento exacto que configures
-- **Lenguaje natural** — entiende "en 30 minutos", "mañana a las 9", "viernes a las 10:00"
-- **Conversaciones guiadas** — pasos interactivos con botones para crear tareas
-- **Persistencia** — todo se guarda en SQLite, nada se pierde al reiniciar
-- **Multi-usuario** — cada usuario tiene sus propias tareas, listas y recordatorios
+- **Comandos tradicionales** — también disponibles si prefieres usarlos
 
 ---
 
@@ -20,6 +20,8 @@ Bot de Telegram que funciona como un asistente personal con **tareas**, **listas
 
 - Python 3.10+
 - Un token de bot de Telegram (obtener de [@BotFather](https://t.me/BotFather))
+- [opencode](https://opencode.ai) instalado globalmente (`npm install -g opencode-ai`)
+- Un provider configurado en opencode (Zen, OpenAI, Claude, etc.)
 
 ---
 
@@ -50,81 +52,70 @@ pip install -r requirements.txt
 
 ## Configuración
 
-1. Habla con [@BotFather](https://t.me/BotFather) en Telegram
-2. Crea un nuevo bot con `/newbot`
-3. Copia el token que te dé
-4. Pégalo en el archivo `.env`:
+1. Habla con [@BotFather](https://t.me/BotFather) en Telegram y crea un bot con `/newbot`
+2. Copia el token en `.env`:
    ```
    TELEGRAM_BOT_TOKEN=123456789:ABCdefGHIjklMNOpqrsTUVwxyz
+   ```
+3. Asegúrate de tener opencode instalado y con un provider configurado:
+   ```bash
+   opencode --version
    ```
 
 ---
 
 ## Ejecutar
 
+### 1. Iniciar opencode server (en una terminal)
+
+```bash
+opencode serve
+```
+
+### 2. Iniciar el bot de Telegram (en otra terminal)
+
 ```bash
 python bot.py
 ```
 
-El bot empezará a escuchar mensajes en Telegram.
-
 ---
 
-## Comandos
+## Uso
 
-### Tareas
+### Modo IA (recomendado)
+
+Simplemente escribe lo que necesites en lenguaje natural:
+
+| Si dices... | El bot hará... |
+|-------------|----------------|
+| "Crea una tarea para limpiar el coche" | Crea una tarea con prioridad normal |
+| "Añade leche, pan y huevos a la lista" | Añade productos a tu lista de la compra |
+| "¿Qué tareas tengo?" | Muestra tus tareas pendientes |
+| "Recuérdame lo del médico mañana a las 9" | Programa un recordatorio |
+| "¿Qué ingredientes lleva una pizza margarita?" | Te dice los ingredientes y los añade a tu lista |
+| "Recomiéndame una rutina para mañana" | Sugiere horarios asumiendo 8h de sueño |
+
+### Comandos tradicionales
+
+Si prefieres los comandos clásicos, también funcionan:
 
 | Comando | Descripción |
 |---------|-------------|
-| `/tarea` | Crear tarea nueva (guiado con pasos) |
+| `/tarea` | Crear tarea nueva (guiado) |
 | `/tareas` | Ver tareas pendientes |
 | `/hecho ID` | Marcar tarea como completada |
 | `/borrar ID` | Eliminar tarea |
-
-### Listas de la compra
-
-| Comando | Descripción |
-|---------|-------------|
 | `/lista` | Crear lista nueva (guiado) |
 | `/listas` | Ver todas tus listas |
 | `/ver ID` | Ver productos de una lista |
-| `/añadir ID producto` | Añadir producto rápido |
+| `/anadir ID producto` | Añadir producto rápido |
 | `/comprado ID` | Marcar item como comprado |
 | `/limpiar ID` | Borrar items comprados |
-
-### Recordatorios
-
-| Comando | Descripción |
-|---------|-------------|
 | `/recordar` | Crear recordatorio (guiado) |
 | `/recordatorios` | Ver recordatorios activos |
 | `/cancelar ID` | Cancelar recordatorio |
-
-### General
-
-| Comando | Descripción |
-|---------|-------------|
 | `/start` | Bienvenida |
 | `/help` | Ayuda completa |
-| `/cancelar` | Cancelar operación en curso |
-
----
-
-## Formatos de tiempo aceptados
-
-El bot entiende varias expresiones de tiempo en español:
-
-```
-en 30 minutos          → 30 min desde ahora
-en 2 horas             → 2h desde ahora
-en 1 día               → mañana a esta hora
-hoy a las 18:00        → hoy a las 6pm
-mañana a las 9:00      → mañana a las 9am
-a las 14:30            → hoy o mañana según hora
-viernes a las 10:00    → próximo viernes
-25/12 09:00            → 25 de diciembre a las 9am
-lunes a las 8:00       → próximo lunes
-```
 
 ---
 
@@ -132,18 +123,21 @@ lunes a las 8:00       → próximo lunes
 
 ```
 TelegramBot/
-├── bot.py              # Punto de entrada
-├── requirements.txt    # Dependencias
-├── .env                # Token del bot (no commitear)
-├── .env.example        # Plantilla de ejemplo
+├── bot.py                  # Punto de entrada
+├── requirements.txt        # Dependencias
+├── .env                    # Token del bot (no commitear)
+├── .env.example            # Plantilla de ejemplo
+├── opencode.jsonc          # Config de opencode (MCP tools)
 │
 ├── bot/
 │   ├── __init__.py
-│   ├── database.py     # SQLite: tareas, listas, recordatorios
-│   └── handlers.py     # Handlers de comandos y conversación
+│   ├── database.py         # SQLite: tareas, listas, recordatorios
+│   ├── handlers.py         # Handlers de comandos y conversación
+│   ├── ai_client.py        # Cliente HTTP para opencode server
+│   └── mcp_server.py       # MCP server: expone la DB como tools para la IA
 │
 └── data/
-    └── bot.db          # Base de datos (auto-creada)
+    └── bot.db              # Base de datos (auto-creada)
 ```
 
 ---
@@ -151,31 +145,34 @@ TelegramBot/
 ## Arquitectura
 
 ```
-Telegram ──→ python-telegram-bot ──→ Handlers ──→ SQLite
-                    │
-                    ├── ConversationHandler (tareas, listas, recordatorios)
-                    ├── CallbackQueryHandler (botones de prioridad)
-                    └── JobQueue (recordatorios programados)
+Telegram ──→ python-telegram-bot ──→ handlers.handle_message
+                                             │
+                                             ▼
+                                    opencode server (HTTP)
+                                             │
+                                    ┌────────┴────────┐
+                                    ▼                 ▼
+                                 IA (Claude/etc)   MCP tools
+                                                      │
+                                                      ▼
+                                                 database.py (SQLite)
 ```
 
 | Componente | Responsabilidad |
 |------------|----------------|
 | `bot.py` | Configuración, registro de handlers, arranque |
-| `bot/database.py` | CRUD completo: tareas, listas, items, recordatorios |
-| `bot/handlers.py` | Lógica de comandos, conversaciones, parsing de fechas |
-| `data/bot.db` | Persistencia SQLite (WAL mode, foreign keys) |
+| `bot/handlers.py` | Handler principal de IA + comandos legacy |
+| `bot/ai_client.py` | Cliente HTTP para el opencode server |
+| `bot/mcp_server.py` | Expone la DB como MCP tools para la IA |
+| `bot/database.py` | CRUD SQLite: tareas, listas, items, recordatorios |
+| `opencode.jsonc` | Configura MCP server para este proyecto |
 
 ---
 
 ## Stack tecnológico
 
 - **python-telegram-bot** — librería oficial de Telegram para Python
-- **SQLite** — base de datos embebida, sin configuración externa
-- **APScheduler** — integrado en python-telegram-bot, ejecuta recordatorios
-- **python-dotenv** — carga variables de entorno desde `.env`
-
----
-
-## Licencia
-
-MIT
+- **opencode server** — servidor headless de opencode para conectar con IA
+- **MCP (Model Context Protocol)** — protocolo estándar para herramientas de IA
+- **SQLite** — persistencia embebida, sin configuración externa
+- **httpx** — cliente HTTP asíncrono para conectar con opencode
