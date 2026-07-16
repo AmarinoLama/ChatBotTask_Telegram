@@ -1,9 +1,9 @@
 """Handlers de comandos y conversación del bot de Telegram.
-Modo IA: los mensajes se procesan mediante opencode server para
-conversación fluida en lenguaje natural."""
+Modo IA: procesa mensajes en lenguaje natural mediante opencode server."""
 
 from __future__ import annotations
 
+import json
 import logging
 import re
 import unicodedata
@@ -13,6 +13,7 @@ from telegram import Update
 from telegram.ext import ContextTypes, ConversationHandler
 
 from bot import database as db
+from bot.ai_client import ejecutar_acciones
 
 logger = logging.getLogger("MisterOrganizer")
 
@@ -29,10 +30,10 @@ logger = logging.getLogger("MisterOrganizer")
 
 
 # ════════════════════════════════════════════════════════════
-#  Handler principal de IA — procesa todo en lenguaje natural
+#  Handler principal de IA
 # ════════════════════════════════════════════════════════════
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    """Procesa cualquier mensaje de texto usando la IA de opencode server."""
+    """Procesa mensajes con IA: opencode responde JSON, el bot ejecuta."""
     if not update.message or not update.message.text:
         return
 
@@ -40,26 +41,37 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
     user_id = update.effective_user.id
     chat_id = update.effective_chat.id
 
-    # Mostrar indicador de escritura mientras la IA piensa
     await context.bot.send_chat_action(chat_id=chat_id, action="typing")
 
     ai_client = context.bot_data.get("ai_client")
     if not ai_client:
         await update.message.reply_text(
-            "⚠️ El módulo de IA no está disponible. Asegúrate de que opencode server esté corriendo."
+            "⚠️ Mister Organizer no está disponible. Asegúrate de que opencode server esté corriendo."
         )
         return
 
     try:
-        response = await ai_client.send_message(user_id, chat_id, text)
-        if response:
-            await update.message.reply_text(response, parse_mode="Markdown")
+        raw = await ai_client.send_message(user_id, text)
+        if not raw:
+            await update.message.reply_text("🤔 No entendí bien, ¿puedes repetirlo?")
+            return
+
+        data = json.loads(raw)
+        mensaje = data.get("mensaje", "¡Hecho!")
+        acciones = data.get("acciones", [])
+
+        if acciones:
+            resumen = ejecutar_acciones(acciones, user_id, chat_id)
+            logger.info("Acciones ejecutadas: %s", resumen)
+
+        await update.message.reply_text(mensaje)
+
+    except json.JSONDecodeError:
+        logger.warning("Respuesta no-JSON de la IA, se muestra cruda")
+        await update.message.reply_text(raw[:4096])
     except Exception as e:
-        logger.exception("Error al comunicar con opencode server")
-        error_msg = str(e)
-        await update.message.reply_text(
-            f"❌ Vaya, algo salió mal... {error_msg[:200]}"
-        )
+        logger.exception("Error en handler de IA")
+        await update.message.reply_text(f"❌ Vaya, algo salió mal... {str(e)[:200]}")
 
 
 # ════════════════════════════════════════════════════════════
