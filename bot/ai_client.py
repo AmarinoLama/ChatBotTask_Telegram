@@ -77,19 +77,25 @@ class OpenCodeClient:
         if self.session_id:
             return self.session_id
 
+        system_prompt = SYSTEM_PROMPT.format(user_id=user_id, chat_id=chat_id)
+
         async with httpx.AsyncClient() as client:
-            system = SYSTEM_PROMPT.format(user_id=user_id, chat_id=chat_id)
             resp = await client.post(
                 f"{self.base_url}/session",
-                json={"title": f"TelegramBot - User {user_id}"},
+                json={"title": f"MagicBot - User {user_id}"},
                 headers=self.headers,
             )
             resp.raise_for_status()
             session = resp.json()
             self.session_id = session["id"]
 
-            resp2 = await client.get(
+            resp2 = await client.post(
                 f"{self.base_url}/session/{self.session_id}/message",
+                json={
+                    "parts": [{"type": "text", "text": system_prompt}],
+                    "noReply": True,
+                    "system": system_prompt,
+                },
                 headers=self.headers,
             )
             resp2.raise_for_status()
@@ -101,12 +107,14 @@ class OpenCodeClient:
     ) -> str:
         """Envía un mensaje al opencode server y devuelve la respuesta textual."""
         session_id = await self.ensure_session(user_id, chat_id)
+        system_prompt = SYSTEM_PROMPT.format(user_id=user_id, chat_id=chat_id)
 
         async with httpx.AsyncClient(timeout=120.0) as client:
             resp = await client.post(
                 f"{self.base_url}/session/{session_id}/message",
                 json={
                     "parts": [{"type": "text", "text": text}],
+                    "system": system_prompt,
                     "noReply": False,
                 },
                 headers=self.headers,
