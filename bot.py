@@ -29,7 +29,7 @@ logging.basicConfig(
     format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
     level=logging.INFO,
 )
-logger = logging.getLogger("MagicBot")
+logger = logging.getLogger("MisterOrganizer")
 
 
 async def _post_init(app: Application) -> None:

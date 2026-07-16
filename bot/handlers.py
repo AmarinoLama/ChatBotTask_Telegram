@@ -14,7 +14,7 @@ from telegram.ext import ContextTypes, ConversationHandler
 
 from bot import database as db
 
-logger = logging.getLogger("MagicBot")
+logger = logging.getLogger("MisterOrganizer")
 
 # Estados de conversación (legacy, para compatibilidad)
 (
@@ -68,7 +68,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
 async def cmd_start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     user = update.effective_user
     text = (
-        f"¡Hola {user.first_name}! 👋 Soy MagicBot, tu asistente con IA.\n\n"
+        f"¡Hola {user.first_name}! 👋 Soy **Mister Organizer**, tu asistente personal con IA.\n\n"
         "Puedes hablarme en lenguaje natural. Por ejemplo:\n"
         "• \"Crea una tarea para comprar el regalo de mamá\"\n"
         "• \"¿Qué tareas tengo pendientes?\"\n"
@@ -78,7 +78,7 @@ async def cmd_start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         "• \"Recomiéndame una rutina de estudio para hoy\"\n\n"
         "Escribe /help si quieres ver los comandos tradicionales."
     )
-    await update.message.reply_text(text)
+    await update.message.reply_text(text, parse_mode="Markdown")
 
 
 async def cmd_help(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
