@@ -151,7 +151,7 @@ async def cmd_help(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         "  /lista — crear lista nueva\n"
         "  /listas — ver todas tus listas\n"
         "  /ver ID — ver items de una lista\n"
-        "  /añadir ID producto — añadir producto a lista\n"
+        "  /anadir ID producto — añadir producto a lista\n"
         "  /comprado ID — marcar item como comprado\n"
         "  /limpiar ID — borrar items comprados\n\n"
         "**Recordatorios**\n"
@@ -353,7 +353,7 @@ async def cmd_listas(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None
         total = len(items)
         lines.append(f"📝 #{lst['id']} — **{lst['name']}** ({unchecked}/{total} pendientes)")
 
-    lines.append("\nUsa /ver ID para ver productos · /añadir ID producto para añadir")
+    lines.append("\nUsa /ver ID para ver productos · /anadir ID producto para añadir")
     await update.message.reply_text("\n".join(lines), parse_mode="Markdown")
 
 
@@ -376,7 +376,7 @@ async def cmd_ver_lista(update: Update, context: ContextTypes.DEFAULT_TYPE) -> N
 
     items = db.list_items(list_id)
     if not items:
-        await update.message.reply_text(f"📝 Lista **{lst['name']}** vacía.\nUsa /añadir ID producto para añadir.",
+        await update.message.reply_text(f"📝 Lista **{lst['name']}** vacía.\nUsa /anadir ID producto para añadir.",
                                         parse_mode="Markdown")
         return
 
@@ -395,7 +395,7 @@ async def cmd_ver_lista(update: Update, context: ContextTypes.DEFAULT_TYPE) -> N
 async def cmd_añadir(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     if len(context.args) < 2:
         await update.message.reply_text(
-            "Uso: /añadir LISTA_ID producto\nEjemplo: /añadir 2 leche"
+            "Uso: /anadir LISTA_ID producto\nEjemplo: /anadir 2 leche"
         )
         return
 

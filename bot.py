@@ -18,7 +18,7 @@ from telegram.ext import (
 )
 
 # Cargar .env
-_ENV = Path(__file__).resolve().parent.parent / ".env"
+_ENV = Path(__file__).resolve().parent / ".env"
 load_dotenv(_ENV)
 
 BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN", "")
@@ -123,7 +123,7 @@ def main() -> None:
     # Listas directas
     app.add_handler(CommandHandler("listas", cmd_listas))
     app.add_handler(CommandHandler("ver", cmd_ver_lista))
-    app.add_handler(CommandHandler("añadir", cmd_añadir))
+    app.add_handler(CommandHandler("anadir", cmd_añadir))
     app.add_handler(CommandHandler("comprado", cmd_comprado))
     app.add_handler(CommandHandler("limpiar", cmd_limpiar))
 
